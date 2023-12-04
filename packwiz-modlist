@@ -1,0 +1,41 @@
+#!/bin/sh
+
+if ! [ "$1" ]
+then
+	printf 'Provider not specified\n'
+	
+	exit 1
+fi
+
+packwiz --help >> /dev/null 2>&1
+
+if ! [ $? ]
+then
+	printf 'Packwiz not found\n'
+
+	exit 1
+fi
+
+if [ -d 'mods' ]
+then
+	rm -r mods
+fi
+
+packwiz refresh >> /dev/null 2>&1
+
+if ! [ $? ]
+then
+	printf 'Modpack not found\n'
+fi
+
+if ! [ -f 'mod-list.txt' ]
+then
+	printf 'mod-list.txt file not found\n'
+
+	exit 1
+fi
+
+cat mod-list.txt | while read -r line
+do
+	packwiz "$1" add -y "$line"
+done
