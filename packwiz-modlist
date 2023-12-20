@@ -7,9 +7,7 @@ then
 	exit 1
 fi
 
-packwiz --help >> /dev/null 2>&1
-
-if ! [ $? ]
+if ! [ command -v packwiz >> /dev/null 2>&1 ]
 then
 	printf 'Packwiz not found\n'
 
