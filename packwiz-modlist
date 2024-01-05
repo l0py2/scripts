@@ -1,22 +1,47 @@
 #!/bin/sh
 
-if ! [ "$1" ]
-then
-	printf 'Provider not specified\n'
-	
-	exit 1
-fi
+print_help() {
+	printf -- 'Help\n\n'
+	printf -- 'Arguments:\n'
+	printf -- '-h for help\n'
+	printf -- '-gm to generate modlist\n'
+	printf -- '-dm to download all mods from modlist\n'
+	printf -- '\nWarning\n'
+	printf -- '-dm removes all the mods before downloading from the modlist\n'
+}
+
+generate_modlist() {
+	printf '# Mod list\n\n' > mod-list.md
+
+	find mods -name '*.pw.toml' | while read -r line
+	do
+		printf -- "- $(cat "$line" | head -n 1 | grep -o '".*"' | sed 's/"//g')\n" >> mod-list.md
+	done
+}
+
+download_modlist() {
+	[ -d 'mods' ] && rm -r mods
+
+	if ! [ -f "mod-list.$1.txt" ]
+	then
+		printf "mod-list.$1.txt file not found\n"
+
+		exit 1
+	fi
+
+	packwiz refresh >> /dev/null 2>&1
+
+	cat "mod-list.$1.txt" | while read -r line
+	do
+		packwiz "$1" add -y "$line"
+	done
+}
 
 if [ -z "$(command -v packwiz)" ]
 then
 	printf 'Packwiz not found\n'
 
 	exit 1
-fi
-
-if [ -d 'mods' ]
-then
-	rm -r mods
 fi
 
 if ! [ -f 'pack.toml' ]
@@ -26,16 +51,20 @@ then
 	exit 1
 fi
 
-if ! [ -f 'mod-list.txt' ]
+if [ -z "$1" ] || [ "$1" = '-h' ]
 then
-	printf 'mod-list.txt file not found\n'
+	print_help
+elif [ "$1" = '-gm' ]
+then
+	generate_modlist
+elif [ "$1" = '-dm' ]
+then
+	if [ -z "$2" ]
+	then
+		printf 'Provider not specified\n'
 
-	exit 1
+		exit 1
+	fi
+
+	download_modlist "$2"
 fi
-
-packwiz refresh >> /dev/null 2>&1
-
-cat mod-list.txt | while read -r line
-do
-	packwiz "$1" add -y "$line"
-done
