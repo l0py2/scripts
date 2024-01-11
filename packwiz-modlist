@@ -13,9 +13,9 @@ print_help() {
 generate_modlist() {
 	printf '# Mod list\n\n' > mod-list.md
 
-	find mods -name '*.pw.toml' | while read -r line
+	packwiz list | while read -r line
 	do
-		printf -- "- $(cat "$line" | head -n 1 | grep -o '".*"' | sed 's/"//g')\n" >> mod-list.md
+		printf -- "- $line\n" >> mod-list.md
 	done
 }
 
