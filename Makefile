@@ -1,14 +1,15 @@
-all: install
+SCRIPTS := packwiz-modlist rbackup
+BIN := ~/.local/bin
+
+all: directories install
 
 directories:
-	mkdir -p ~/.local/bin
+	mkdir -p ${BIN}
 
-install: directories
-	cp packwiz-modlist ~/.local/bin
-	cp rbackup ~/.local/bin
+install:
+	cp -f ${SCRIPTS} ${BIN}
 
 uninstall:
-	rm ~/.local/bin/packwiz-modlist
-	rm ~/.local/bin/rbackup
+	rm -f ${addprefix ${BIN},${SCRIPTS}}
 
 .PHONY: all directories install uninstall

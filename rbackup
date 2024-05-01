@@ -12,9 +12,11 @@ then
 	rclone copyto ~/.config/rclone/rclone.conf unencrypted-drive:rclone.conf
 
 	rclone sync ~/.local/share/wiki encrypted-drive:wiki
+	rclone sync ~/Documents encrypted-drive:Documents
 elif [ "$1" = "--force-reverse-sync" ]
 then
 	rclone copyto unencrypted-drive:rclone.conf ~/.config/rclone/rclone.conf
 
-	rclone sync encrypted-drive:wiki ~/.local/share/wiki
+	rclone copy encrypted-drive:wiki ~/.local/share/wiki
+	rclone copy encrypted-drive:Documents ~/Documents
 fi
