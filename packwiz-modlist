@@ -22,18 +22,20 @@ generate_modlist() {
 download_modlist() {
 	[ -d 'mods' ] && rm -r mods
 
-	if ! [ -f "mod-list.$1.txt" ]
-	then
-		printf "mod-list.$1.txt file not found\n"
-
-		exit 1
-	fi
-
 	packwiz refresh >> /dev/null 2>&1
 
-	cat "mod-list.$1.txt" | while read -r line
+	cat download-list/mods.cf.txt | while read -r line
 	do
-		packwiz "$1" add -y "$line"
+		printf 'Mod link: %s\n' "$line"
+
+		packwiz cf add -y "$line"
+	done
+
+	cat download-list/mods.mr.txt | while read -r line
+	do
+		printf 'Mod link: %s\n' "$line"
+
+		packwiz mr add -y "$line"
 	done
 }
 
@@ -59,12 +61,5 @@ then
 	generate_modlist
 elif [ "$1" = '-dm' ]
 then
-	if [ -z "$2" ]
-	then
-		printf 'Provider not specified\n'
-
-		exit 1
-	fi
-
-	download_modlist "$2"
+	download_modlist
 fi
