@@ -7,16 +7,20 @@ then
 	exit 1
 fi
 
-if [ -z "$1" ]
+if [ "$1" = "-s" ]
 then
 	rclone copyto ~/.config/rclone/rclone.conf unencrypted-drive:rclone.conf
 
 	rclone sync ~/.local/share/wiki encrypted-drive:wiki
-	rclone sync ~/Documents encrypted-drive:Documents
-elif [ "$1" = "--force-reverse-sync" ]
+	rclone sync ~/Documents/backup encrypted-drive:documents
+elif [ "$1" = "--reverse-sync" ]
 then
 	rclone copyto unencrypted-drive:rclone.conf ~/.config/rclone/rclone.conf
 
 	rclone copy encrypted-drive:wiki ~/.local/share/wiki
-	rclone copy encrypted-drive:Documents ~/Documents
+	rclone copy encrypted-drive:documents ~/Documents/backup
+else
+	printf 'rbackup\n\n'
+	printf 'Use -s to sync from the PC\n'
+	printf 'Use --reverse-sync to sync to the PC\n'
 fi

@@ -6,7 +6,7 @@ all: directories install
 directories:
 	mkdir -p ${BIN}
 
-install:
+install: directories
 	cp -f ${SCRIPTS} ${BIN}
 
 uninstall:
