@@ -9,16 +9,14 @@ fi
 
 if [ "$1" = "-s" ]
 then
-	rclone copyto ~/.config/rclone/rclone.conf unencrypted-drive:rclone.conf
-
-	rclone sync ~/.local/share/wiki encrypted-drive:wiki
-	rclone sync ~/Documents/backup encrypted-drive:documents
+	rclone -v copyto ~/.config/rclone/rclone.conf unencrypted-drive:rclone.conf
+	rclone -v sync ~/.local/share/wiki encrypted-drive:wiki
+	rclone -v sync ~/Documents/backup encrypted-drive:documents
 elif [ "$1" = "--reverse-sync" ]
 then
-	rclone copyto unencrypted-drive:rclone.conf ~/.config/rclone/rclone.conf
-
-	rclone copy encrypted-drive:wiki ~/.local/share/wiki
-	rclone copy encrypted-drive:documents ~/Documents/backup
+	rclone -v copyto unencrypted-drive:rclone.conf ~/.config/rclone/rclone.conf
+	rclone -v copy encrypted-drive:wiki ~/.local/share/wiki
+	rclone -v copy encrypted-drive:documents ~/Documents/backup
 else
 	printf 'rbackup\n\n'
 	printf 'Use -s to sync from the PC\n'
