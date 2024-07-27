@@ -1,4 +1,4 @@
-SCRIPTS := packwiz-modlist rbackup
+SCRIPTS := packwiz-modlist rbackup clone-dotfiles
 BIN := ~/.local/bin
 
 all: directories install

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ -n "$1" ]
+then
+	dotfiles_git_dir="$HOME/.dotfiles"
+
+	git clone --bare "$1" "$dotfiles_git_dir"
+	git --git-dir="$dotfiles_git_dir" --work-tree="$HOME" checkout -f
+	git --git-dir="$dotfiles_git_dir" --work-tree="$HOME" config status.showUntrackedFiles no
+else
+	printf 'clone-dotfiles\n\n'
+	printf 'Use [repository] to specify an repository to clone\n'
+fi
